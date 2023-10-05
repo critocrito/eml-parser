@@ -1,0 +1,17 @@
+[package]
+name = "eml-parser"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.75"
+clap = { version = "4.4.6", features = ["derive", "env"] }
+csv = "1.3.0"
+dashmap = { version = "5.5.3", features = ["rayon"] }
+env_logger = "0.10.0"
+indicatif = { version = "0.17.7", features = ["rayon"] }
+log = "0.4.20"
+mail-parser = "0.9.1"
+rayon = "1.8.0"
