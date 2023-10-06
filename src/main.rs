@@ -30,6 +30,8 @@ enum Commands {
     List(ListArgs),
     /// Extract a Cosmograph network graph.
     Cosmograph(CosmographArgs),
+    /// Extract all attachments from emails.
+    Attachment(AttachmentArgs),
 }
 
 #[derive(Args, Debug)]
@@ -54,6 +56,17 @@ struct CosmographArgs {
     input: String,
 }
 
+#[derive(Args, Debug)]
+#[command(author, version, about, long_about = None)]
+struct AttachmentArgs {
+    /// Target path where to extract attachments to.
+    #[arg(short, long, value_name = "TARGET", default_value = "out")]
+    outdir: String,
+
+    /// Path to directory containing EML  files.
+    input: String,
+}
+
 fn main() {
     let cli = Cli::parse();
 
@@ -72,6 +85,10 @@ fn main() {
 
         Commands::Cosmograph(args) => {
             commands::cosmograph(&args.output, &args.input).unwrap();
+        }
+
+        Commands::Attachment(args) => {
+            commands::attachment(&args.outdir, &args.input).unwrap();
         }
     }
 }

@@ -1,5 +1,5 @@
 use anyhow::{anyhow, Result};
-use mail_parser::{parsers::message::IntoByteSlice, Addr, DateTime, MessageParser};
+use mail_parser::{parsers::message::IntoByteSlice, Addr, Message, MessageParser, MimeHeaders};
 use serde::Serialize;
 use std::{convert::From, fmt, fs, hash::Hash, path::Path};
 
@@ -131,4 +131,31 @@ pub(crate) fn eml_transmissions(file: impl AsRef<Path>) -> Result<Vec<Transmissi
     }
 
     Ok(results)
+}
+
+fn write_attachments(outdir: &Path, message: &Message) {
+    for attachment in message.attachments() {
+        if !attachment.is_message() {
+            fs::create_dir_all(&outdir).unwrap();
+            std::fs::write(
+                outdir.join(attachment.attachment_name().unwrap_or("Untitled")),
+                attachment.contents(),
+            )
+            .unwrap();
+        } else {
+            write_attachments(outdir, attachment.message().unwrap());
+        }
+    }
+}
+
+pub(crate) fn extract_attachments<P: AsRef<Path>>(file: P, outdir: &Path) -> Result<()> {
+    let input = fs::read_to_string(&file)?;
+    let m = MessageParser::default()
+        .parse(input.into_byte_slice())
+        .ok_or_else(|| anyhow!("Failed to parse"))?;
+    let outdir = outdir.join(file);
+
+    write_attachments(&outdir, &m);
+
+    Ok(())
 }

@@ -8,6 +8,7 @@ use dashmap::DashMap;
 use indicatif::ProgressBar;
 use log::info;
 use rayon::prelude::*;
+use std::path::Path;
 
 pub(crate) fn list(output: &str, input: &str) -> Result<()> {
     let files = host::list_files(input, 1).unwrap();
@@ -131,6 +132,22 @@ pub(crate) fn cosmograph(output: &str, input: &str) -> Result<()> {
     }
 
     wtr.flush()?;
+
+    Ok(())
+}
+
+pub(crate) fn attachment(outdir: &str, input: &str) -> Result<()> {
+    let files = host::list_files(input, 1).unwrap();
+    let outdir = Path::new(outdir).to_path_buf();
+
+    let bar = ProgressBar::new(files.len().try_into().unwrap());
+
+    files.par_iter().for_each(|f| {
+        mail::extract_attachments(f, &outdir).unwrap();
+        bar.inc(1);
+    });
+
+    bar.finish();
 
     Ok(())
 }
