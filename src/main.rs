@@ -28,11 +28,24 @@ struct GlobalArgs {
 enum Commands {
     /// List email addresses and names in the dataset and export a CSV file.
     List(ListArgs),
+    /// Extract a Cosmograph network graph.
+    Cosmograph(CosmographArgs),
 }
 
 #[derive(Args, Debug)]
 #[command(author, version, about, long_about = None)]
 struct ListArgs {
+    /// Name of CSV output file.
+    #[arg(short, long, value_name = "FILE", default_value = "out.csv")]
+    output: String,
+
+    /// Path to directory containing EML  files.
+    input: String,
+}
+
+#[derive(Args, Debug)]
+#[command(author, version, about, long_about = None)]
+struct CosmographArgs {
     /// Name of CSV output file.
     #[arg(short, long, value_name = "FILE", default_value = "out.csv")]
     output: String,
@@ -55,6 +68,10 @@ fn main() {
     match &cli.command {
         Commands::List(args) => {
             commands::list(&args.output, &args.input).unwrap();
+        }
+
+        Commands::Cosmograph(args) => {
+            commands::cosmograph(&args.output, &args.input).unwrap();
         }
     }
 }

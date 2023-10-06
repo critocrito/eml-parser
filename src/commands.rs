@@ -1,4 +1,7 @@
-use crate::{host, mail};
+use crate::{
+    host,
+    mail::{self, Transmission},
+};
 use anyhow::Result;
 use csv;
 use dashmap::DashMap;
@@ -90,6 +93,41 @@ pub(crate) fn list(output: &str, input: &str) -> Result<()> {
             count.to_string(),
             "bcc".to_string(),
         ])?;
+    }
+
+    wtr.flush()?;
+
+    Ok(())
+}
+
+pub(crate) fn cosmograph(output: &str, input: &str) -> Result<()> {
+    let files = host::list_files(input, 1).unwrap();
+
+    let bar = ProgressBar::new(files.len().try_into().unwrap());
+
+    let results = files
+        .par_iter()
+        .map(|f| {
+            if let Ok(m) = mail::eml_transmissions(f) {
+                bar.inc(1);
+                m
+            } else {
+                bar.inc(1);
+                vec![]
+            }
+        })
+        .flatten()
+        .collect::<Vec<Transmission>>();
+
+    bar.finish();
+
+    info!("Extracted {} transmissions", results.len());
+
+    let mut wtr = csv::WriterBuilder::new().from_path(output)?;
+    wtr.write_record(&["source", "target", "date", "kind"])?;
+
+    for t in results {
+        wtr.write_record(&[t.source.addr, t.target.addr, t.date, t.kind.to_string()])?;
     }
 
     wtr.flush()?;

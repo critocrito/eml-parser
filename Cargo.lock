@@ -244,6 +244,7 @@ dependencies = [
  "log",
  "mail-parser",
  "rayon",
+ "serde",
 ]
 
 [[package]]
