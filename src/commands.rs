@@ -6,7 +6,7 @@ use anyhow::Result;
 use csv;
 use dashmap::DashMap;
 use indicatif::ProgressBar;
-use log::info;
+use log::{error, info};
 use rayon::prelude::*;
 use std::path::Path;
 
@@ -142,12 +142,27 @@ pub(crate) fn attachment(outdir: &str, input: &str) -> Result<()> {
 
     let bar = ProgressBar::new(files.len().try_into().unwrap());
 
-    files.par_iter().for_each(|f| {
-        mail::extract_attachments(f, &outdir).unwrap();
-        bar.inc(1);
-    });
+    let results = files
+        .par_iter()
+        .map(|f| match mail::extract_attachments(f, &outdir) {
+            Err(_) => {
+                bar.inc(1);
+                error!("{} failed to extract attachments", f.to_string_lossy());
+                vec![f.to_string_lossy().to_string()]
+            }
+            _ => {
+                bar.inc(1);
+                vec![]
+            }
+        })
+        .flatten()
+        .collect::<Vec<String>>();
 
     bar.finish();
+
+    for r in results {
+        println!("{}", r);
+    }
 
     Ok(())
 }
