@@ -45,12 +45,7 @@ pub(crate) fn list(output: &str, input: &str) -> Result<()> {
     bar.finish();
 
     info!(
-        r#"Extracted entries:
- from: {}
-   to: {}
-   cc: {}
-  bcc: {}
-"#,
+        "Extracted entries: from: {}, to: {}, cc: {}, bcc: {}",
         from_map.len(),
         to_map.len(),
         cc_map.len(),
