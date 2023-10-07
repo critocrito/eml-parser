@@ -44,7 +44,7 @@
 
 ## About The Project
 
-This code was developed to help with network analyses for various investigations that took place at [Der SPIEGEL](https://www.spiegel.de) and [Paper Trail Media](https://www.papertrailmedia.de). 
+This code was developed to support investigations that took place at [Der SPIEGEL](https://www.spiegel.de) and [Paper Trail Media](https://www.papertrailmedia.de). 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
