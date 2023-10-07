@@ -11,7 +11,7 @@ use rayon::prelude::*;
 use std::path::Path;
 
 pub(crate) fn list(output: &str, input: &str) -> Result<()> {
-    let files = host::list_files(input, 1).unwrap();
+    let files = host::list_files(input).unwrap();
 
     let from_map: DashMap<mail::Address, u32> = DashMap::new();
     let to_map: DashMap<mail::Address, u32> = DashMap::new();
@@ -102,7 +102,7 @@ pub(crate) fn list(output: &str, input: &str) -> Result<()> {
 }
 
 pub(crate) fn network(output: &str, input: &str) -> Result<()> {
-    let files = host::list_files(input, 1).unwrap();
+    let files = host::list_files(input).unwrap();
 
     let bar = ProgressBar::new(files.len().try_into().unwrap());
 
@@ -137,7 +137,7 @@ pub(crate) fn network(output: &str, input: &str) -> Result<()> {
 }
 
 pub(crate) fn attachment(outdir: &str, input: &str) -> Result<()> {
-    let files = host::list_files(input, 1).unwrap();
+    let files = host::list_files(input).unwrap();
     let outdir = Path::new(outdir).to_path_buf();
 
     let bar = ProgressBar::new(files.len().try_into().unwrap());
