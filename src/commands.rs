@@ -160,9 +160,7 @@ pub(crate) fn attachment(outdir: &str, input: &str) -> Result<()> {
 
     bar.finish();
 
-    for r in results {
-        println!("{}", r);
-    }
+    results.iter().for_each(|r| println!("{}", r));
 
     Ok(())
 }
