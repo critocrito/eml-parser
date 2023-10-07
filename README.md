@@ -12,7 +12,7 @@
   <h3 align="center">EML Parser</h3>
 
   <p align="center">
-    Analyze and extract data from a corpus of emails.
+    Extract data from a corpus of emails.
     <br />
     <a href="https://github.com/critocrito/eml-parser/issues">Report Bug</a>
     ·
