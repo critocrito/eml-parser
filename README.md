@@ -92,8 +92,10 @@ eml-parser list -o people.csv mail-directory
 
 ### Turn a corpus to a network graph
 
+The CSV file of the network graph can be used at [Cosmograph](https://cosmograph.app/run/) for visualization or further analyzed with tools like [graphctl](https://github.com/critocrito/graphctl).
+
 ``` sh
-eml-parser cosmograph -o graph.csv mail-directory
+eml-parser network -o graph.csv mail-directory
 ```
 
 ### Extract all attachments

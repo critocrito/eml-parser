@@ -28,8 +28,8 @@ struct GlobalArgs {
 enum Commands {
     /// List email addresses and names in the dataset and export a CSV file.
     List(ListArgs),
-    /// Extract a Cosmograph network graph.
-    Cosmograph(CosmographArgs),
+    /// Extract a network network graph.
+    Network(NetworkArgs),
     /// Extract all attachments from emails.
     Attachment(AttachmentArgs),
 }
@@ -47,7 +47,7 @@ struct ListArgs {
 
 #[derive(Args, Debug)]
 #[command(author, version, about, long_about = None)]
-struct CosmographArgs {
+struct NetworkArgs {
     /// Name of CSV output file.
     #[arg(short, long, value_name = "FILE", default_value = "out.csv")]
     output: String,
@@ -83,8 +83,8 @@ fn main() {
             commands::list(&args.output, &args.input).unwrap();
         }
 
-        Commands::Cosmograph(args) => {
-            commands::cosmograph(&args.output, &args.input).unwrap();
+        Commands::Network(args) => {
+            commands::network(&args.output, &args.input).unwrap();
         }
 
         Commands::Attachment(args) => {

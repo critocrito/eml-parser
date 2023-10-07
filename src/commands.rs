@@ -101,7 +101,7 @@ pub(crate) fn list(output: &str, input: &str) -> Result<()> {
     Ok(())
 }
 
-pub(crate) fn cosmograph(output: &str, input: &str) -> Result<()> {
+pub(crate) fn network(output: &str, input: &str) -> Result<()> {
     let files = host::list_files(input, 1).unwrap();
 
     let bar = ProgressBar::new(files.len().try_into().unwrap());
